@@ -1,0 +1,140 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import os
+import sys
+import csv
+import operator
+
+class Point:
+
+    def __init__(self, x, y, p):
+        self._x = x
+        self._y = y
+        self._p = p
+
+    def _get_x(self):
+        return _x
+
+    def _get_y(self):
+        return _y
+
+    def _get_p(self):
+        return _p
+    
+
+
+pol = [[]]
+
+
+def printUsage(code):
+    if (code == 0):
+        exit(0)
+    elif (code == 1):
+        exit(84)
+    elif (code == 2):
+       
+        exit(84)
+    elif (code == 3):
+        
+        exit(84)
+    elif (code == 21):
+        exit(84)
+    elif (code == 22):
+        exit(84)
+    elif (code == 23):
+        exit(84)
+    elif (code == 24):
+        exit(84)
+    elif (code == 25):
+        exit(84)
+    else:
+        exit(84)
+        
+
+
+def initBezier(size, x, y, csvres):
+    global pol
+    elt = 0
+    print("Size = %d\n" % size)
+    xx = (size - 1 - x) / (size - 1)
+    print("x = %f\n" % xx)
+    yy = (size - 1 - y) / (size - 1)
+    print("y = %f\n" % yy)
+    i = 0
+    j = 0
+    for i in range(size):
+        tmp = []
+        for j in range(size):
+            if ((elt < csvres) and (csvres[elt][0] == i) and (csvres[elt][1] == j)):
+                tmp.append(csvres[elt][2])
+            else:
+                tmp.append(0)
+        pol.append(tmp)
+
+def Bezier(n, x, y, pol):
+    tmp = 0
+    i = 0
+    j = 0
+    for i in range(size):
+        for j in range(size):
+            tmp = tmp + bernsteinLaw(x, size, i + 1) * bernsteinLaw(y, size, j + 1) * pol[i][j]
+    print("%.2f") % tmp
+
+def bernsteinLaw(t, m, k):
+    result = 0
+    factM = myFact(m)
+    factK = myFact(k)
+    mK = m - k
+    factMK = myFact(mK)
+    result = (factM / (factK * factMK))
+    result = result * pow(t, k)
+    result = result * pow(1.0 - t, m - k)
+    print("t = %f, m = %d, k = %d, result = %f\n") % (t, m, k, result)
+    return result
+
+def myFact(n):
+    if (n < 2):
+        return 1
+    else:
+        return n*myFact(n - 1)
+
+def checkArg(n, x, y):
+    if (n < 0):
+        printUsage(21)
+    elif (x < 0):
+        printUsage(22)
+    elif (x > n):
+        printUsage(23)
+    elif (y < 0):
+        printUsage(24)
+    elif (y > n):
+        printUsage(25)
+
+def checkFile():
+    pointList = []
+    if (len(sys.argv) == 2):
+        if sys.argv[1] == "-h":
+            printUsage(0)
+        else:
+            printUsage(1)
+    elif (len(sys.argv) != 5):
+        printUsage(1)
+    n = int(sys.argv[1])
+    x = int(sys.argv[3])
+    y = int(sys.argv[4])
+    checkArg(n, x, y)
+    try:    
+        with open(sys.argv[2], newline='') as csvfile:
+            fileLine = csv.reader(csvfile, delimiter=';')
+            for line in fileLine:
+                print("x: %d, y: %d, p: %d" % (int(line[0]), int(line[1]), int(line[2])))
+                pointList.append(Point(int(line[0]), int(line[1]), int(line[2])))
+    except:
+        printUsage(3)
+
+    initBezier(n, x, y, pointList)
+    Bezier(n ,x, y)
+    exit(0)
+
+checkFile();
